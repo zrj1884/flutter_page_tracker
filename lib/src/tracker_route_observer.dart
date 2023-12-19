@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'page_tracker_aware.dart';
 
 class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
-
   // 存放路由堆栈
   final List<Route> routes = [];
   final List<Route> routesPopup = [];
@@ -12,18 +11,13 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   final Map<R, Set<PageTrackerAware>> _listenersPopup = <R, Set<PageTrackerAware>>{};
 
   void subscribe(PageTrackerAware pageTrackerAware, R route) {
-    assert(pageTrackerAware != null);
-    assert(route != null);
-
     if (route is PageRoute) {
-      final Set<PageTrackerAware> subscribers = _listeners.putIfAbsent(
-          route, () => Set<PageTrackerAware>());
+      final Set<PageTrackerAware> subscribers = _listeners.putIfAbsent(route, () => Set<PageTrackerAware>());
       if (subscribers.add(pageTrackerAware)) {
         pageTrackerAware.didPageView();
       }
     } else if (route is PopupRoute) {
-      final Set<PageTrackerAware> subscribers = _listenersPopup.putIfAbsent(
-          route, () => Set<PageTrackerAware>());
+      final Set<PageTrackerAware> subscribers = _listenersPopup.putIfAbsent(route, () => Set<PageTrackerAware>());
       if (subscribers.add(pageTrackerAware)) {
         pageTrackerAware.didPageView();
       }
@@ -31,33 +25,28 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 
   void unsubscribe(PageTrackerAware pageTrackerAware) {
-    assert(pageTrackerAware != null);
-
     for (R route in _listeners.keys) {
-      final Set<PageTrackerAware> subscribers = _listeners[route];
-      subscribers?.remove(pageTrackerAware);
+      final Set<PageTrackerAware> subscribers = _listeners[route]!;
+      subscribers.remove(pageTrackerAware);
     }
 
     for (R route in _listenersPopup.keys) {
-      final Set<PageTrackerAware> subscribers = _listenersPopup[route];
-      subscribers?.remove(pageTrackerAware);
+      final Set<PageTrackerAware> subscribers = _listenersPopup[route]!;
+      subscribers.remove(pageTrackerAware);
     }
   }
 
   @override
-  void didPush(Route route, Route previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
 
     // 之后正常页面（非弹窗）入栈之后，才会触发前一个页面的离开
     if (route is PageRoute) {
       // 触发PageExit事件
       if (routes.length > 0) {
-        R previousRoute = routes.last;
-        final Set<PageTrackerAware> previousSubscribers = _listeners[previousRoute];
-        if (previousSubscribers != null) {
-          for (PageTrackerAware pageTrackerAware in previousSubscribers) {
-            pageTrackerAware.didPageExit();
-          }
+        final Set<PageTrackerAware> previousSubscribers = _listeners[routes.last]!;
+        for (PageTrackerAware pageTrackerAware in previousSubscribers) {
+          pageTrackerAware.didPageExit();
         }
       }
 
@@ -78,16 +67,14 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 
   @override
-  void didPop(Route route, Route previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
 
     if (route is PageRoute) {
       // 触发PageExit
-      final Set<PageTrackerAware> subscribers = _listeners[route];
-      if (subscribers != null) {
-        for (PageTrackerAware pageTrackerAware in subscribers) {
-          pageTrackerAware.didPageExit();
-        }
+      final Set<PageTrackerAware> subscribers = _listeners[route]!;
+      for (PageTrackerAware pageTrackerAware in subscribers) {
+        pageTrackerAware.didPageExit();
       }
 
       // 清除路由栈
@@ -95,23 +82,18 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
 
       // 触发PageView
       if (routes.length > 0) {
-        R previousRoute = routes.last;
-        final Set<PageTrackerAware> previousSubscribers = _listeners[previousRoute];
-        if (previousSubscribers != null) {
-          Future.microtask(() {
-            for (PageTrackerAware pageTrackerAware in previousSubscribers) {
-              pageTrackerAware.didPageView();
-            }
-          });
-        }
+        final Set<PageTrackerAware> previousSubscribers = _listeners[routes.last]!;
+        Future.microtask(() {
+          for (PageTrackerAware pageTrackerAware in previousSubscribers) {
+            pageTrackerAware.didPageView();
+          }
+        });
       }
     } else if (route is PopupRoute) {
       // 触发PageExit
-      final Set<PageTrackerAware> subscribers = _listenersPopup[route];
-      if (subscribers != null) {
-        for (PageTrackerAware pageTrackerAware in subscribers) {
-          pageTrackerAware.didPageExit();
-        }
+      final Set<PageTrackerAware> subscribers = _listenersPopup[route]!;
+      for (PageTrackerAware pageTrackerAware in subscribers) {
+        pageTrackerAware.didPageExit();
       }
 
       // 清除路由栈
@@ -120,7 +102,7 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 
   @override
-  void didRemove(Route route, Route previousRoute) {
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
 
     if (route is PageRoute) {
@@ -131,7 +113,7 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
 
     if (oldRoute is PageRoute) {
@@ -139,14 +121,13 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
       assert(index != -1);
       routes.removeAt(index);
 
-      routes.insert(index, newRoute);
+      routes.insert(index, newRoute!);
     } else if (oldRoute is PopupRoute) {
       int index = routesPopup.indexOf(oldRoute);
       assert(index != -1);
       routesPopup.removeAt(index);
 
-      routesPopup.insert(index, newRoute);
+      routesPopup.insert(index, newRoute!);
     }
   }
-
 }

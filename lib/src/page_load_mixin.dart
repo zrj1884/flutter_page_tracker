@@ -4,33 +4,32 @@ import 'page_tracker_aware.dart';
 import 'dart:async';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'page_load_provider.dart';
-import 'package:flutter/scheduler.dart';
 
 // 监控页面加载时长
 mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
   // 增加页面加载时间统计
-  DateTime _firstCreateTime;  // 初始化时间
-  DateTime _firstBuildTIme;   // 首次build时间，通常为布局解析时间
-  DateTime _beginRequestTime; // 发起网络请求
-  DateTime _endRequestTime;   // 网络请求结束
-  DateTime _rebuildStartTime; // 得到请求结果后二次刷新开始的时间
-  DateTime _nextFrameTime;    // 二次刷新后，完成渲染的时间
+  DateTime? _firstCreateTime;  // 初始化时间
+  DateTime? _firstBuildTime;   // 首次build时间，通常为布局解析时间
+  DateTime? _beginRequestTime; // 发起网络请求
+  DateTime? _endRequestTime;   // 网络请求结束
+  DateTime? _rebuildStartTime; // 得到请求结果后二次刷新开始的时间
+  DateTime? _nextFrameTime;    // 二次刷新后，完成渲染的时间
 
-  StreamSubscription<int> _httpRequestSS;
+  StreamSubscription<int>? _httpRequestSS;
 
   @protected
-  String get httpRequestKey => null;
+  String? get httpRequestKey => null;
 
   void _didPageloaded() {
 
     // 总时间
-    Duration totalTime = _nextFrameTime.difference(_firstCreateTime);
+    Duration totalTime = _nextFrameTime?.difference(_firstCreateTime!) ?? Duration.zero;
     // 页面初始化时间
-    Duration buildTime = _firstBuildTIme.difference(_firstCreateTime);
+    Duration buildTime = _firstBuildTime?.difference(_firstCreateTime!) ?? Duration.zero;
     // 网络请求时间
-    Duration requestTime = httpRequestKey == null ? null : _endRequestTime.difference(_beginRequestTime);
+    Duration requestTime = httpRequestKey == null ? Duration.zero : _endRequestTime?.difference(_beginRequestTime!) ?? Duration.zero;
     // 渲染时间
-    Duration renderTime = _nextFrameTime.difference(_rebuildStartTime);
+    Duration renderTime = _nextFrameTime?.difference(_rebuildStartTime!) ?? Duration.zero;
 
     if (PageLoadProvider.of(context) != 'pro') {
       Fluttertoast.showToast(msg: "加载时长：${totalTime.inMilliseconds}", fontSize: 16);
@@ -77,11 +76,11 @@ mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
 
     // 监听网络开始加载
     if (httpRequestKey != null) {
-      _httpRequestSS = PageLoadHttpRequestObserver.on(httpRequestKey).listen(_handleHttpRequestEvent);
+      _httpRequestSS = PageLoadHttpRequestObserver.on(httpRequestKey!).listen(_handleHttpRequestEvent);
     }
 
     Future.delayed(Duration(seconds: 0), () {
-      _firstBuildTIme ??= DateTime.now();
+      _firstBuildTime ??= DateTime.now();
       rebuildStartTime();
     });
   }

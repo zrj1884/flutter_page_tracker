@@ -7,11 +7,10 @@ import 'page_load_mixin.dart';
 
 // 处理pageview组件的事件传法
 mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
-
-  StreamSubscription<PageTrackerEvent> sb;
+  StreamSubscription<PageTrackerEvent>? sb;
   bool isPageView = false;
   // 向列表中的列表转发页面事件
-  Set<PageTrackerAware> subscribers;
+  late Set<PageTrackerAware> subscribers;
 
   @override
   void initState() {
@@ -23,9 +22,8 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (sb == null && pageViewIndex!= null) {
-
-      Stream<PageTrackerEvent> stream = PageViewWrapper.of(context, pageViewIndex);
+    if (sb == null && pageViewIndex != null) {
+      Stream<PageTrackerEvent>? stream = PageViewWrapper.of(context, pageViewIndex!);
       // 如果外围没有包裹PageViewWrapper，那么stream为null
       if (stream != null) {
         sb = stream.listen(_onPageTrackerEvent);
@@ -50,7 +48,7 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
     }
   }
 
-  int get pageViewIndex => null;
+  int? get pageViewIndex => null;
 
   @override
   void didPageView() {
@@ -92,8 +90,7 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
   @override
   void dispose() {
     try {
-      if (isPageView)
-        didPageExit();
+      if (isPageView) didPageExit();
       sb?.cancel();
     } catch (err) {
       rethrow;
@@ -102,46 +99,44 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
     }
   }
 
-  static PageViewListenerWrapperState of(BuildContext context) {
-    return context.ancestorStateOfType(TypeMatcher<PageViewListenerWrapperState>());
+  static PageViewListenerWrapperState? of(BuildContext context) {
+    return context.findAncestorStateOfType<PageViewListenerWrapperState>();
   }
 }
 
-typedef onPageLoadedCallback = void Function(Duration, Duration, Duration, Duration);
+typedef OnPageLoadedCallback = void Function(Duration, Duration, Duration, Duration);
 
 // 列表项中还可以再次嵌套列表，所以[PageViewListenerWrapper]需要把
 class PageViewListenerWrapper extends StatefulWidget {
-
   final int index;
   final bool hasRequest;
   final Widget child;
-  final VoidCallback onPageView;
-  final VoidCallback onPageExit;
-  final onPageLoadedCallback onPageLoaded;
+  final VoidCallback? onPageView;
+  final VoidCallback? onPageExit;
+  final OnPageLoadedCallback? onPageLoaded;
 
-  const PageViewListenerWrapper(this.index, {
-    Key key,
+  const PageViewListenerWrapper(
+    this.index, {
+    Key? key,
     this.hasRequest = false,
-    this.child,
+    required this.child,
     this.onPageView,
     this.onPageExit,
     this.onPageLoaded,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   PageViewListenerWrapperState createState() {
     return PageViewListenerWrapperState();
   }
-
 }
 
-class PageViewListenerWrapperState extends State<PageViewListenerWrapper> with PageTrackerAware, PageViewListenerMixin, PageLoadMixin {
-
+class PageViewListenerWrapperState extends State<PageViewListenerWrapper>
+    with PageTrackerAware, PageViewListenerMixin, PageLoadMixin {
   @override
   Widget build(BuildContext context) {
     return widget.child;
   }
-
 
   @override
   int get pageViewIndex => widget.index;
@@ -150,9 +145,7 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper> with P
   void didPageView() {
     try {
       super.didPageView();
-      if (widget.onPageView != null) {
-        widget.onPageView();
-      }
+      widget.onPageView?.call();
     } catch (err) {
       assert(() {
         throw err;
@@ -164,9 +157,7 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper> with P
   void didPageExit() {
     try {
       super.didPageExit();
-      if (widget.onPageExit != null) {
-        widget.onPageExit();
-      }
+      widget.onPageExit?.call();
     } catch (err) {
       assert(() {
         throw err;
@@ -177,9 +168,7 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper> with P
   @override
   void didPageLoaded(Duration totalTime, Duration buildTime, Duration requestTime, Duration renderTime) {
     try {
-      if (widget.onPageLoaded != null) {
-        widget.onPageLoaded(totalTime, buildTime, requestTime, renderTime);
-      }
+      widget.onPageLoaded?.call(totalTime, buildTime, requestTime, renderTime);
     } catch (err) {
       assert(() {
         throw err;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class TabViewPage extends StatefulWidget {
-  TabViewPage({Key key, this.title}) : super(key: key);
+  TabViewPage({Key? key, required this.title}) : super(key: key);
 
 
   final String title;
@@ -16,7 +16,7 @@ class _State extends State<TabViewPage> with TickerProviderStateMixin, Automatic
   @override
   bool get wantKeepAlive => true;
 
-  TabController tabController;
+  late TabController tabController;
 
   @override
   void initState() {

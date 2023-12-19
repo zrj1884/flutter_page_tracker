@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class PageViewWrapperPage extends StatefulWidget {
-  PageViewWrapperPage({Key key, this.title}) : super(key: key);
+  PageViewWrapperPage({Key? key, required this.title}) : super(key: key);
 
 
   final String title;
@@ -16,7 +16,7 @@ class _MyHomePageState extends State<PageViewWrapperPage> with AutomaticKeepAliv
   @override
   bool get wantKeepAlive => true;
 
-  PageController pageController;
+  late PageController pageController;
 
   @override
   void initState() {

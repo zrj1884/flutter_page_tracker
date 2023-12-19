@@ -1,4 +1,4 @@
-abstract class PageTrackerAware {
+mixin PageTrackerAware {
 
   // 判断当前路由是否是被浏览的路由
   bool isActive = false;

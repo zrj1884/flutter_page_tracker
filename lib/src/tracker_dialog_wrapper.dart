@@ -3,19 +3,16 @@ import 'tracker_page_mixin.dart';
 import 'page_tracker_aware.dart';
 
 class TrackerDialogWrapper extends StatefulWidget {
-
   final Widget child;
-  final VoidCallback didPageView;
-  final VoidCallback didPageExit;
+  final VoidCallback? didPageView;
+  final VoidCallback? didPageExit;
 
   const TrackerDialogWrapper({
-    Key key,
-    this.child,
+    Key? key,
+    required this.child,
     this.didPageView,
     this.didPageExit,
-  }):
-        assert(child != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _State createState() {
@@ -33,17 +30,13 @@ class _State extends State<TrackerDialogWrapper> with PageTrackerAware, TrackerP
   void didPageView() {
     super.didPageView();
 
-    if (widget.didPageView != null) {
-      widget.didPageView();
-    }
+    widget.didPageView?.call();
   }
 
   @override
   void didPageExit() {
     super.didPageExit();
 
-    if (widget.didPageExit != null) {
-      widget.didPageExit();
-    }
+    widget.didPageExit?.call();
   }
 }

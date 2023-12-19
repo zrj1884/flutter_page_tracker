@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
-import 'pageview_wrapper_page.dart';
-
 class PageviewInTabviewPage extends StatefulWidget {
-  PageviewInTabviewPage({Key key, this.title}) : super(key: key);
-
+  PageviewInTabviewPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -13,13 +10,13 @@ class PageviewInTabviewPage extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<PageviewInTabviewPage> {
-
+class _State extends State<PageviewInTabviewPage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<PageviewInTabviewPage> {
   @override
   bool get wantKeepAlive => true;
 
-  TabController tabController;
-  PageController pageController;
+  late TabController tabController;
+  late PageController pageController;
 
   @override
   void initState() {
@@ -31,7 +28,6 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
   Widget _buildTag(BuildContext _, int index, int color) {
     return Builder(
       builder: (_) {
-
         return PageViewListenerWrapper(
           index,
           onPageView: () {
@@ -50,7 +46,10 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("Tab $index: normal tab", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                      Text(
+                        "Tab $index: normal tab",
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                      ),
                     ],
                   ),
                 ),
@@ -99,19 +98,32 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Page $index wrapped in Tab1", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
-                    Container(height: 50,),
+                    Text(
+                      "Page $index wrapped in Tab1",
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      height: 50,
+                    ),
                     Text("For PageView and TabView, PageView and PageExit will be trigged when you "
                         "switch between views."),
-                    Container(height: 15,),
+                    Container(
+                      height: 15,
+                    ),
                     Text("You can see 'PageView $index' and 'PageExit $index' in the console."),
-                    Container(height: 15,),
+                    Container(
+                      height: 15,
+                    ),
                     Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
                         "Try it by clicking the buttom show below. "),
-                    Container(height: 15,),
+                    Container(
+                      height: 15,
+                    ),
                     Text("When you pop a PageRoute, the previous "
                         "focused page will receive a PageView event. "),
-                    Container(height: 50,),
+                    Container(
+                      height: 50,
+                    ),
                     Text("Try slide", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
                   ],
                 ),
@@ -142,7 +154,7 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -161,29 +173,20 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
                   children: <Widget>[
                     Builder(
                       builder: (BuildContext context) {
-
-                        return PageViewListenerWrapper(
-                          0,
-                          onPageView: () {
-                            // print("tabbar pageview 0");
-                          },
-                          onPageExit: () {
-                            // print("tabbar pageexit 0");
-                          },
-                          child: PageViewWrapper(
-                            changeDelegate: PageViewChangeDelegate(pageController),
-                            pageAmount: 3,
-                            initialPage: pageController.initialPage,
-                            child: PageView(
-                              controller: pageController,
-                              children: <Widget>[
-                                _buildPage(0, 100),
-                                _buildPage(1, 300),
-                                _buildPage(2, 500)
-                              ],
-                            ),
-                          )
-                        );
+                        return PageViewListenerWrapper(0, onPageView: () {
+                          // print("tabbar pageview 0");
+                        }, onPageExit: () {
+                          // print("tabbar pageexit 0");
+                        },
+                            child: PageViewWrapper(
+                              changeDelegate: PageViewChangeDelegate(pageController),
+                              pageAmount: 3,
+                              initialPage: pageController.initialPage,
+                              child: PageView(
+                                controller: pageController,
+                                children: <Widget>[_buildPage(0, 100), _buildPage(1, 300), _buildPage(2, 500)],
+                              ),
+                            ));
                       },
                     ),
                     _buildTag(context, 1, 600),
@@ -198,15 +201,20 @@ class _State extends State<PageviewInTabviewPage> with TickerProviderStateMixin,
                 child: TabBar(
                   controller: tabController,
                   tabs: <Widget>[
-                    Tab(text: "Tab1",),
-                    Tab(text: "Tab2",),
-                    Tab(text: "Tab3",),
+                    Tab(
+                      text: "Tab1",
+                    ),
+                    Tab(
+                      text: "Tab2",
+                    ),
+                    Tab(
+                      text: "Tab3",
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

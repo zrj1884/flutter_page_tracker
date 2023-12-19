@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class DetailPage extends StatefulWidget {
-  DetailPage({Key key}) : super(key: key);
+  DetailPage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();

@@ -5,9 +5,9 @@ class PageLoadProvider extends InheritedWidget {
   final String env;
 
   PageLoadProvider({
-    Key key,
+    Key? key,
     this.env = 'pro',
-    @required Widget child,
+    required Widget child,
   }): super(key: key, child: child);
 
   @override
@@ -17,9 +17,7 @@ class PageLoadProvider extends InheritedWidget {
 
   static String of(BuildContext context) {
     try {
-      return (context.inheritFromWidgetOfExactType(
-          PageLoadProvider) as PageLoadProvider)
-          .env;
+      return (context.dependOnInheritedWidgetOfExactType<PageLoadProvider>() as PageLoadProvider).env;
     } catch (err) {
       return "pro";
     }

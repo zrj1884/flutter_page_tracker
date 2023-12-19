@@ -6,8 +6,8 @@ import 'page_view_listener_mixin.dart';
 import 'tracker_route_observer_provider.dart';
 
 mixin TrackerPageMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
-  TrackerStackObserver<ModalRoute> _routeObserver;
-  PageViewListenerWrapperState _pageViewListenerWrapperState;
+  TrackerStackObserver<ModalRoute>? _routeObserver;
+  PageViewListenerWrapperState? _pageViewListenerWrapperState;
 
   @override
   void didChangeDependencies() {
@@ -20,7 +20,7 @@ mixin TrackerPageMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
     // 订阅PageView组件中的事件
     _pageViewListenerWrapperState = PageViewListenerMixin.of(context);
     if (_pageViewListenerWrapperState != null) {
-      _pageViewListenerWrapperState.subscribe(this);
+      _pageViewListenerWrapperState!.subscribe(this);
       return;
     }
 
@@ -28,11 +28,10 @@ mixin TrackerPageMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
     if (_routeObserver != null) {
       return;
     }
-    _routeObserver = TrackerRouteObserverProvider.of(context)
-      ..subscribe(
-        this,
-        ModalRoute.of(context),
-      );
+    _routeObserver = TrackerRouteObserverProvider.of(context);
+    if (_routeObserver != null) {
+      _routeObserver!.subscribe(this, ModalRoute.of(context)!);
+    }
   }
 
   @override

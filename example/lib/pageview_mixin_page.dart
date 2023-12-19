@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class PageViewMixinPage extends StatefulWidget {
-  PageViewMixinPage({Key key, this.title}) : super(key: key);
+  PageViewMixinPage({Key? key, required this.title}) : super(key: key);
 
 
   final String title;
@@ -16,7 +16,7 @@ class _MyHomePageState extends State<PageViewMixinPage> with AutomaticKeepAliveC
   @override
   bool get wantKeepAlive => true;
 
-  PageController pageController;
+  late PageController pageController;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class Page extends StatefulWidget {
   final int index;
   final int color;
 
-  const Page({Key key, this.index, this.color}): super(key: key);
+  const Page({Key? key, required this.index, required this.color}): super(key: key);
 
   @override
   PageState createState() {
