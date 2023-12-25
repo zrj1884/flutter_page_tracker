@@ -1,14 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class DetailPage extends StatefulWidget {
-  DetailPage({Key? key}) : super(key: key);
+  const DetailPage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
-class _MyHomePageState extends State<DetailPage> with PageTrackerAware, TrackerPageMixin, PageLoadMixin {
+class _DetailPageState extends State<DetailPage> with PageTrackerAware, TrackerPageMixin, PageLoadMixin {
 
 
   @override
@@ -16,16 +17,16 @@ class _MyHomePageState extends State<DetailPage> with PageTrackerAware, TrackerP
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("PageRoute Demo"),
+        title: const Text("PageRoute Demo"),
       ),
       body: Container(
         color: Colors.blue,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
+            const Text(
               "When a PageRoute is added to navigation stack, a PageExit event "
                   "will be trigged on previous route and you can override didPageExit method"
                   "by using TrackerPageMixin. ",
@@ -33,17 +34,17 @@ class _MyHomePageState extends State<DetailPage> with PageTrackerAware, TrackerP
             Container(
               height: 10,
             ),
-            Text(
+            const Text(
               "After PageExit event, a PageView event will be trigged on current route.",
             ),
             Container(
               height: 10,
             ),
-            Text("Vice versa for the pop of PageRoute."),
+            const Text("Vice versa for the pop of PageRoute."),
             Container(
               height: 50,
             ),
-            Text("You can see 'PageExit: PageRoute' and 'PageView: PageRoute' in the "
+            const Text("You can see 'Tracker PageView: detail' and 'Tracker PageExit: detail' in the "
                 "console panel.")
           ],
         ),
@@ -55,18 +56,22 @@ class _MyHomePageState extends State<DetailPage> with PageTrackerAware, TrackerP
   void didPageView() {
     super.didPageView();
 
-    print("PageView: PageRoute");
+    if (kDebugMode) {
+      print("Tracker PageView: detail");
+    }
   }
 
   @override
   void didPageExit() {
     super.didPageExit();
 
-    print("PageExit: PageRoute");
+    if (kDebugMode) {
+      print("Tracker PageExit: detail");
+    }
   }
 
   @override
-  void didPageLoaded(_, __, ___, ____) {
+  void didPageLoaded(Duration totalTime, Duration buildTime, Duration requestTime, Duration renderTime) {
     // DoSomething
   }
 }

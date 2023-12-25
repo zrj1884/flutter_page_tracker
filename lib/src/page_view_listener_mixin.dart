@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -16,7 +17,7 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
   void initState() {
     super.initState();
 
-    subscribers = Set<PageTrackerAware>();
+    subscribers = <PageTrackerAware>{};
   }
 
   @override
@@ -54,13 +55,13 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
   void didPageView() {
     try {
       super.didPageView();
-      subscribers.forEach((subscriber) {
+      for (var subscriber in subscribers) {
         subscriber.didPageView();
-      });
+      }
     } catch (err) {
-      assert(() {
-        throw err;
-      }());
+      if (kDebugMode) {
+        rethrow;
+      }
     }
   }
 
@@ -68,13 +69,13 @@ mixin PageViewListenerMixin<T extends StatefulWidget> on State<T>, PageTrackerAw
   void didPageExit() {
     try {
       super.didPageExit();
-      subscribers.forEach((subscriber) {
+      for (var subscriber in subscribers) {
         subscriber.didPageExit();
-      });
+      }
     } catch (err) {
-      assert(() {
-        throw err;
-      }());
+      if (kDebugMode) {
+        rethrow;
+      }
     }
   }
 
@@ -117,13 +118,13 @@ class PageViewListenerWrapper extends StatefulWidget {
 
   const PageViewListenerWrapper(
     this.index, {
-    Key? key,
+    super.key,
     this.hasRequest = false,
     required this.child,
     this.onPageView,
     this.onPageExit,
     this.onPageLoaded,
-  }) : super(key: key);
+  });
 
   @override
   PageViewListenerWrapperState createState() {
@@ -147,9 +148,9 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper>
       super.didPageView();
       widget.onPageView?.call();
     } catch (err) {
-      assert(() {
-        throw err;
-      }());
+      if (kDebugMode) {
+        rethrow;
+      }
     }
   }
 
@@ -159,9 +160,9 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper>
       super.didPageExit();
       widget.onPageExit?.call();
     } catch (err) {
-      assert(() {
-        throw err;
-      }());
+      if (kDebugMode) {
+        rethrow;
+      }
     }
   }
 
@@ -170,9 +171,9 @@ class PageViewListenerWrapperState extends State<PageViewListenerWrapper>
     try {
       widget.onPageLoaded?.call(totalTime, buildTime, requestTime, renderTime);
     } catch (err) {
-      assert(() {
-        throw err;
-      }());
+      if (kDebugMode) {
+        rethrow;
+      }
     }
   }
 }

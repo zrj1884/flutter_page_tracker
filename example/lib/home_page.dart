@@ -1,17 +1,18 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 import 'package:example/popup_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerPageMixin, PageLoadMixin {
@@ -29,10 +30,6 @@ class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerP
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +46,23 @@ class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerP
             SliverToBoxAdapter(
               child: Container(
                 color: Colors.blue,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("flutter_page_tracker is a flutter plugin which "
+                    const Text("flutter_page_tracker is a flutter plugin which "
                         "help tracking route events of PageRoute/PopupRoute/PageView/TabView."),
                     Container(height: 50,),
-                    Text("1. Route events include PageView and PageExit."),
+                    const Text("1. Route events include PageView and PageExit."),
                     Container(height: 15,),
-                    Text("2. For PageRoute, when the current route is pushed to the top of the stack, "
+                    const Text("2. For PageRoute, when the current route is pushed to the top of the stack, "
                         "a PageView event will be trigged on the current, and a PageExit event will "
                         "be trigged on previous route, and vice versa for pop route."),
                     Container(height: 15,),
-                    Text("3. For PopupRoute, only PageView will be trigged when dialog "
+                    const Text("3. For PopupRoute, only PageView will be trigged when dialog "
                         "is pushed, and vice versa for pop route."),
                     Container(height: 15,),
-                    Text("4. For PageView and TabView, PageView and PageExit will be trigged when you "
+                    const Text("4. For PageView and TabView, PageView and PageExit will be trigged when you "
                         "switch between views.")
                   ],
                 ),
@@ -86,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerP
                         showDialog(
                             context: context,
                             builder: (_) {
-                              return PopupPage();
+                              return const PopupPage();
                             }
                         );
                       }
@@ -128,11 +125,13 @@ class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerP
   void didPageView() {
     super.didPageView();
 
-    print("tracker pageview home");
+    if (kDebugMode) {
+      print("Tracker PageView: home");
+    }
   }
 
   @override
-  void didPageLoaded(_, __, ___, ____) {
+  void didPageLoaded(Duration totalTime, Duration buildTime, Duration requestTime, Duration renderTime) {
     // DoSomething
   }
 
@@ -140,6 +139,8 @@ class _MyHomePageState extends State<MyHomePage> with PageTrackerAware, TrackerP
   void didPageExit() {
     super.didPageExit();
 
-    print("tracker pageExit home");
+    if (kDebugMode) {
+      print("Tracker PageExit: home");
+    }
   }
 }

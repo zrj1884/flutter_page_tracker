@@ -1,3 +1,4 @@
+// ignore_for_file: unnecessary_null_comparison
 // 监控路由状态，并保存路由栈
 import 'package:flutter/material.dart';
 import 'page_tracker_aware.dart';
@@ -11,13 +12,15 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   final Map<R, Set<PageTrackerAware>> _listenersPopup = <R, Set<PageTrackerAware>>{};
 
   void subscribe(PageTrackerAware pageTrackerAware, R route) {
+    assert(pageTrackerAware != null);
+    assert(route != null);
     if (route is PageRoute) {
-      final Set<PageTrackerAware> subscribers = _listeners.putIfAbsent(route, () => Set<PageTrackerAware>());
+      final Set<PageTrackerAware> subscribers = _listeners.putIfAbsent(route, () => <PageTrackerAware>{});
       if (subscribers.add(pageTrackerAware)) {
         pageTrackerAware.didPageView();
       }
     } else if (route is PopupRoute) {
-      final Set<PageTrackerAware> subscribers = _listenersPopup.putIfAbsent(route, () => Set<PageTrackerAware>());
+      final Set<PageTrackerAware> subscribers = _listenersPopup.putIfAbsent(route, () => <PageTrackerAware>{});
       if (subscribers.add(pageTrackerAware)) {
         pageTrackerAware.didPageView();
       }
@@ -25,6 +28,7 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 
   void unsubscribe(PageTrackerAware pageTrackerAware) {
+    assert(pageTrackerAware != null);
     for (R route in _listeners.keys) {
       final Set<PageTrackerAware> subscribers = _listeners[route]!;
       subscribers.remove(pageTrackerAware);
@@ -43,7 +47,7 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
     // 之后正常页面（非弹窗）入栈之后，才会触发前一个页面的离开
     if (route is PageRoute) {
       // 触发PageExit事件
-      if (routes.length > 0) {
+      if (routes.isNotEmpty) {
         final Set<PageTrackerAware> previousSubscribers = _listeners[routes.last]!;
         for (PageTrackerAware pageTrackerAware in previousSubscribers) {
           pageTrackerAware.didPageExit();
@@ -81,7 +85,7 @@ class TrackerStackObserver<R extends Route<dynamic>> extends NavigatorObserver {
       routes.removeLast();
 
       // 触发PageView
-      if (routes.length > 0) {
+      if (routes.isNotEmpty) {
         final Set<PageTrackerAware> previousSubscribers = _listeners[routes.last]!;
         Future.microtask(() {
           for (PageTrackerAware pageTrackerAware in previousSubscribers) {

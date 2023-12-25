@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 import 'dart:math';
@@ -5,8 +6,8 @@ import 'dart:math';
 class PopupPage extends StatelessWidget {
 
   const PopupPage({
-    Key key,
-  }): super(key: key);
+    super.key,
+  });
 
   Widget _button(String text, VoidCallback onTap) {
     return GestureDetector(
@@ -25,10 +26,14 @@ class PopupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return TrackerDialogWrapper(
       didPageView: () {
-        print('dialog didPageView');
+        if (kDebugMode) {
+          print('dialog didPageView');
+        }
       },
       didPageExit: () {
-        print('dialog didPageExit');
+        if (kDebugMode) {
+          print('dialog didPageExit');
+        }
       },
       child: SimpleDialog(
         elevation: 0,
@@ -36,7 +41,7 @@ class PopupPage extends StatelessWidget {
         children: <Widget>[
           ClipRRect(
             clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
             child: Container(
               width: 400,
               color: Colors.blue,
@@ -44,12 +49,12 @@ class PopupPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10),
-                    child: Text("When you show a dialog, only PageView event will be trigged. "),
+                    padding: const EdgeInsets.all(10),
+                    child: const Text("When you show a dialog, only PageView event will be trigged. "),
                   ),
                   Container(
-                    padding: EdgeInsets.all(10),
-                    child: Text("You can see 'dialog didPageView' in the console. "),
+                    padding: const EdgeInsets.all(10),
+                    child: const Text("You can see 'dialog didPageView' in the console. "),
                   ),
                   Container(height: 10,),
                   _button("Go to anther PageRoute, will not trigger PageExit on this dialog", () {

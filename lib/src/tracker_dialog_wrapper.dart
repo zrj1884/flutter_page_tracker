@@ -8,19 +8,17 @@ class TrackerDialogWrapper extends StatefulWidget {
   final VoidCallback? didPageExit;
 
   const TrackerDialogWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.didPageView,
     this.didPageExit,
-  }) : super(key: key);
+  });
 
   @override
-  _State createState() {
-    return _State();
-  }
+  State<TrackerDialogWrapper> createState() => _TrackerDialogWrapperState();
 }
 
-class _State extends State<TrackerDialogWrapper> with PageTrackerAware, TrackerPageMixin {
+class _TrackerDialogWrapperState extends State<TrackerDialogWrapper> with PageTrackerAware, TrackerPageMixin {
   @override
   Widget build(BuildContext context) {
     return widget.child;

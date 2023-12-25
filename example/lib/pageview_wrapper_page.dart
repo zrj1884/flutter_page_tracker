@@ -1,17 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class PageViewWrapperPage extends StatefulWidget {
-  PageViewWrapperPage({Key? key, required this.title}) : super(key: key);
+  const PageViewWrapperPage({super.key, required this.title});
 
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<PageViewWrapperPage> createState() => _PageViewWrapperPageState();
 }
 
-class _MyHomePageState extends State<PageViewWrapperPage> with AutomaticKeepAliveClientMixin<PageViewWrapperPage> {
+class _PageViewWrapperPageState extends State<PageViewWrapperPage> with AutomaticKeepAliveClientMixin<PageViewWrapperPage> {
 
   @override
   bool get wantKeepAlive => true;
@@ -28,10 +29,14 @@ class _MyHomePageState extends State<PageViewWrapperPage> with AutomaticKeepAliv
     return PageViewListenerWrapper(
       index,
       onPageView: () {
-        print("pageview $index");
+        if (kDebugMode) {
+          print("pageview $index");
+        }
       },
       onPageExit: () {
-        print("pageexit $index");
+        if (kDebugMode) {
+          print("pageexit $index");
+        }
       },
       onPageLoaded: (_, __, ___, ____) {
       },
@@ -42,24 +47,24 @@ class _MyHomePageState extends State<PageViewWrapperPage> with AutomaticKeepAliv
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Page $index", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                    Text("Page $index", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
                     Container(height: 50,),
-                    Text("For PageView and TabView, PageView and PageExit will be trigged when you "
+                    const Text("For PageView and TabView, PageView and PageExit will be trigged when you "
                     "switch between views."),
                     Container(height: 15,),
                     Text("You can see 'PageView $index' and 'PageExit $index' in the console."),
                     Container(height: 15,),
-                    Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
+                    const Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
                         "Try it by clicking the buttom show below. "),
                     Container(height: 15,),
-                    Text("When you pop a PageRoute, the previous "
+                    const Text("When you pop a PageRoute, the previous "
                         "focused page will receive a PageView event. "),
                     Container(height: 50,),
-                    Text("Try slide", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
+                    const Text("Try slide", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
                   ],
                 ),
               ),
@@ -70,7 +75,7 @@ class _MyHomePageState extends State<PageViewWrapperPage> with AutomaticKeepAliv
                 child: Container(
                   color: Colors.amber,
                   height: 50,
-                  child: Center(
+                  child: const Center(
                     child: Text("Go to another PageRoute"),
                   ),
                 ),

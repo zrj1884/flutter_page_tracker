@@ -50,7 +50,7 @@ mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
   void setState(fn) {
     if (httpRequestKey != null && _endRequestTime != null && _rebuildStartTime == null) {
       _rebuildStartTime = DateTime.now();
-      Future.delayed(Duration(seconds: 0), () {
+      Future.delayed(const Duration(seconds: 0), () {
         _nextFrameTime ??= DateTime.now();
         _didPageloaded();
       });
@@ -79,7 +79,7 @@ mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
       _httpRequestSS = PageLoadHttpRequestObserver.on(httpRequestKey!).listen(_handleHttpRequestEvent);
     }
 
-    Future.delayed(Duration(seconds: 0), () {
+    Future.delayed(const Duration(seconds: 0), () {
       _firstBuildTime ??= DateTime.now();
       rebuildStartTime();
     });
@@ -95,7 +95,7 @@ mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
     } else { // 使用网络请求
       if (_endRequestTime != null && _rebuildStartTime == null) {
         _rebuildStartTime = DateTime.now();
-        Future.delayed(Duration(seconds: 0), () {
+        Future.delayed(const Duration(seconds: 0), () {
           _nextFrameTime ??= DateTime.now();
           _didPageloaded();
         });
@@ -112,7 +112,7 @@ mixin PageLoadMixin<T extends StatefulWidget> on State<T>, PageTrackerAware {
 
 // 监控网络请求
 class PageLoadHttpRequestObserver {
-  static StreamController<Map> _streamController = StreamController.broadcast(sync: true);
+  static final StreamController<Map> _streamController = StreamController<Map>.broadcast(sync: true);
 
   static void fireHttpRequestStart(String key) {
     _streamController.add({

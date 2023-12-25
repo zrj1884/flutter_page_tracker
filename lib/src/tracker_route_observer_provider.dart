@@ -5,9 +5,9 @@ class TrackerRouteObserverProvider extends InheritedWidget {
   final TrackerStackObserver<ModalRoute> trackerStackObserver = TrackerStackObserver<ModalRoute>();
 
   TrackerRouteObserverProvider({
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {

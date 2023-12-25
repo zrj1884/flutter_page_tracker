@@ -1,16 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class PageviewInTabviewPage extends StatefulWidget {
-  PageviewInTabviewPage({Key? key, required this.title}) : super(key: key);
+  const PageviewInTabviewPage({super.key, required this.title});
 
   final String title;
 
   @override
-  _State createState() => _State();
+  State<PageviewInTabviewPage> createState() => _PageviewInTabviewPageState();
 }
 
-class _State extends State<PageviewInTabviewPage>
+class _PageviewInTabviewPageState extends State<PageviewInTabviewPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<PageviewInTabviewPage> {
   @override
   bool get wantKeepAlive => true;
@@ -31,10 +32,14 @@ class _State extends State<PageviewInTabviewPage>
         return PageViewListenerWrapper(
           index,
           onPageView: () {
-            print("TabView: PageView $index");
+            if (kDebugMode) {
+              print("TabView: PageView $index");
+            }
           },
           onPageExit: () {
-            print("TabView: PageExit $index");
+            if (kDebugMode) {
+              print("TabView: PageExit $index");
+            }
           },
           child: Container(
             color: Colors.blue[color],
@@ -42,13 +47,13 @@ class _State extends State<PageviewInTabviewPage>
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         "Tab $index: normal tab",
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -64,7 +69,7 @@ class _State extends State<PageviewInTabviewPage>
                     child: Container(
                       color: Colors.amber,
                       height: 50,
-                      child: Center(
+                      child: const Center(
                         child: Text("Go to another PageRoute"),
                       ),
                     ),
@@ -82,10 +87,14 @@ class _State extends State<PageviewInTabviewPage>
     return PageViewListenerWrapper(
       index,
       onPageView: () {
-        print("pageview $index");
+        if (kDebugMode) {
+          print("pageview $index");
+        }
       },
       onPageExit: () {
-        print("pageexit $index");
+        if (kDebugMode) {
+          print("pageexit $index");
+        }
       },
       child: SafeArea(
         child: Container(
@@ -94,18 +103,18 @@ class _State extends State<PageviewInTabviewPage>
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       "Page $index wrapped in Tab1",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       height: 50,
                     ),
-                    Text("For PageView and TabView, PageView and PageExit will be trigged when you "
+                    const Text("For PageView and TabView, PageView and PageExit will be trigged when you "
                         "switch between views."),
                     Container(
                       height: 15,
@@ -114,17 +123,17 @@ class _State extends State<PageviewInTabviewPage>
                     Container(
                       height: 15,
                     ),
-                    Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
+                    const Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
                         "Try it by clicking the buttom show below. "),
                     Container(
                       height: 15,
                     ),
-                    Text("When you pop a PageRoute, the previous "
+                    const Text("When you pop a PageRoute, the previous "
                         "focused page will receive a PageView event. "),
                     Container(
                       height: 50,
                     ),
-                    Text("Try slide", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
+                    const Text("Try slide", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
                   ],
                 ),
               ),
@@ -139,7 +148,7 @@ class _State extends State<PageviewInTabviewPage>
                   child: Container(
                     color: Colors.amber,
                     height: 50,
-                    child: Center(
+                    child: const Center(
                       child: Text("Go to another PageRoute"),
                     ),
                   ),
@@ -168,7 +177,7 @@ class _State extends State<PageviewInTabviewPage>
                 initialPage: 0,
                 changeDelegate: TabViewChangeDelegate(tabController),
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: <Widget>[
                     Builder(
@@ -200,7 +209,7 @@ class _State extends State<PageviewInTabviewPage>
                 right: 0,
                 child: TabBar(
                   controller: tabController,
-                  tabs: <Widget>[
+                  tabs: const <Widget>[
                     Tab(
                       text: "Tab1",
                     ),

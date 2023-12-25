@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'tracker_page_mixin.dart';
 import 'page_tracker_aware.dart';
@@ -6,15 +7,13 @@ import 'page_tracker_aware.dart';
 class TrackerPageWidget extends StatefulWidget {
   final Widget child;
 
-  const TrackerPageWidget({Key? key, required this.child}) : super(key: key);
+  const TrackerPageWidget({super.key, required this.child});
 
   @override
-  _State createState() {
-    return _State();
-  }
+  State<TrackerPageWidget> createState() => _TrackerPageWidgetState();
 }
 
-class _State extends State<TrackerPageWidget> with PageTrackerAware, TrackerPageMixin {
+class _TrackerPageWidgetState extends State<TrackerPageWidget> with PageTrackerAware, TrackerPageMixin {
   @override
   Widget build(BuildContext context) {
     return widget.child;
@@ -24,13 +23,17 @@ class _State extends State<TrackerPageWidget> with PageTrackerAware, TrackerPage
   void didPageView() {
     super.didPageView();
 
-    print("didPageView");
+    if (kDebugMode) {
+      print("didPageView");
+    }
   }
 
   @override
   void didPageExit() {
     super.didPageExit();
 
-    print("didPageExit");
+    if (kDebugMode) {
+      print("didPageExit");
+    }
   }
 }

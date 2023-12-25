@@ -1,17 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_tracker/flutter_page_tracker.dart';
 
 class TabViewPage extends StatefulWidget {
-  TabViewPage({Key? key, required this.title}) : super(key: key);
+  const TabViewPage({super.key, required this.title});
 
 
   final String title;
 
   @override
-  _State createState() => _State();
+  State<TabViewPage> createState() => _TabViewPageState();
 }
 
-class _State extends State<TabViewPage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<TabViewPage> {
+class _TabViewPageState extends State<TabViewPage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<TabViewPage> {
 
   @override
   bool get wantKeepAlive => true;
@@ -31,10 +32,14 @@ class _State extends State<TabViewPage> with TickerProviderStateMixin, Automatic
         return PageViewListenerWrapper(
           index,
           onPageView: () {
-            print("TabView: PageView $index");
+            if (kDebugMode) {
+              print("TabView: PageView $index");
+            }
           },
           onPageExit: () {
-            print("TabView: PageExit $index");
+            if (kDebugMode) {
+              print("TabView: PageExit $index");
+            }
           },
           child: Container(
             color: Colors.blue[color],
@@ -42,21 +47,21 @@ class _State extends State<TabViewPage> with TickerProviderStateMixin, Automatic
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("Tab $index", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                      Text("Tab $index", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
                       Container(height: 50,),
-                      Text("For PageView and TabView, PageView and PageExit will be trigged when you "
+                      const Text("For PageView and TabView, PageView and PageExit will be trigged when you "
                           "switch between views."),
                       Container(height: 15,),
                       Text("You can see 'PageView $index' and 'PageExit $index' in the console."),
                       Container(height: 15,),
-                      Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
+                      const Text("PageExit event will also be trigged when you push a new PageRoute on current stack. "
                           "Try it by clicking the buttom show below."),
                       Container(height: 15,),
-                      Text("When you pop a PageRoute, the previous "
+                      const Text("When you pop a PageRoute, the previous "
                           "focused tab will receive a PageView event. "),
                     ],
                   ),
@@ -72,7 +77,7 @@ class _State extends State<TabViewPage> with TickerProviderStateMixin, Automatic
                     child: Container(
                       color: Colors.amber,
                       height: 50,
-                      child: Center(
+                      child: const Center(
                         child: Text("Go to another PageRoute"),
                       ),
                     ),
@@ -120,7 +125,7 @@ class _State extends State<TabViewPage> with TickerProviderStateMixin, Automatic
                     color: Colors.amber[900],
                     child: TabBar(
                       controller: tabController,
-                      tabs: <Widget>[
+                      tabs: const <Widget>[
                         Tab(text: "Tab1",),
                         Tab(text: "Tab2",),
                         Tab(text: "Tab3",),

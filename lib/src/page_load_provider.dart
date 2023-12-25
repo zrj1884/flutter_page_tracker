@@ -4,11 +4,11 @@ class PageLoadProvider extends InheritedWidget {
 
   final String env;
 
-  PageLoadProvider({
-    Key? key,
+  const PageLoadProvider({
+    super.key,
     this.env = 'pro',
-    required Widget child,
-  }): super(key: key, child: child);
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(PageLoadProvider oldWidget) {
